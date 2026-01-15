@@ -31,16 +31,47 @@ def main():
         time.sleep(5)
         
 
-        listings = page.locator('a[href*="/maps/place/"]')
+        listings = page.locator('a[href*="/maps/place/"]') # Look for every stuff thats includes /maps/place/ # Olhe para qualquer coisa que inclua /maps/place/
+
+        count = listings.count() # How many entites were found 
         
-        # Conta quantos achou
-        count = listings.count()
-        print(f"✅ Encontrei {count} empresas na lista!")
-        
-        # Vamos imprimir o link da primeira só pra confirmar
-        if count > 0:
-            first_link = listings.nth(0).get_attribute("href")
-            print(f"🔗 Exemplo de link capturado: {first_link[:50]}...") # Mostra só o começo
+    
+        if count > 0: # Runs only if something was found # Roda somente se algo foi encontrado
+            print(f"✅ Encontrei {count} empresas! Começando a extração...")
+            
+            
+            for i in range(count): # Range count ponts to how many entities were found # Range count aponta para quantas entidades foram encontradas
+                try:
+                    print(f"\n📍 Processando empresa {i+1}...") # Log 
+                    listings.nth(i).click()                    # 2. Action (Clica na empresa)
+                    page.wait_for_selector('h1', timeout=5000) # Wait for the details to load # Espera os detalhes carregarem
+
+                    cabecalho = page.locator("h1:visible") \
+                                .filter(has_not_text="Results") \
+                                .filter(has_not_text="Sponsored")
+                
+                # Só pra garantir, espera ele estar visível
+                    cabecalho.first.wait_for(state="visible", timeout=5000)
+                
+                    nome_empresa = cabecalho.first.inner_text()
+                    
+                    phone_btn = page.locator('button[data-item-id^="phone:"]') # Locate the phone button # Localiza o botão de telefone
+                    telefone = "Sem telefone"                   # Default text if no phone is found # Texto padrão se nenhum telefone for encontrado
+                    if phone_btn.count() > 0:  # If the phone button exists, extract the phone number # Se o botão de telefone existir, extrai o número de telefone
+                        raw_text = phone_btn.get_attribute("aria-label") # Get the aria-label attribute which contains the phone number # Pega o atributo aria-label que contém o número de telefone
+                        telefone = raw_text.replace("Phone: ", "").strip() # Clean the text to get just the number # Limpa o texto para obter apenas o número
+                    
+                    print(f"   🏢 Nome: {nome_empresa}")
+                    print(f"   📞 Tel:  {telefone}")
+                    
+                except Exception as e:
+                    print(f"   ❌ Erro nessa empresa: {e}")
+                
+                time.sleep(1) # Respira um pouco entre uma e outra
+
+        # SENÃO, avisa que deu ruim
+        else:
+            print("⚠️ Não conseguimos fazer a busca. O Google não retornou nada ou o seletor mudou.")
 
         browser.close() # Close the browser # Fecha o navegador
         
