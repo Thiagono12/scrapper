@@ -55,36 +55,77 @@ def main():
 
                 if count > 0:  # Runs only if something was found # Roda somente se algo foi encontrado
                     print(f"✅ Encontrei {count} empresas! Começando a extração...")
+                    ultimo_nome = "" # Inicialize here to keep track of the last company name # Inicialize aqui para acompanhar o nome da última empresa
+
 
                     for i in range(count):  # Range count ponts to how many entities were found # Range count aponta para quantas entidades foram encontradas
                         if stop_flag:
                             break
                         try:
                             print(f"\n📍 Processando empresa {i+1}...")  # Log 
+                        
+                            # --- CORREÇÃO DE CLIQUE (Scroll necessário) ---
+                            # Antes de clicar, garantimos que o item está visível
+                            #Before clicking, we ensure the item is visible
+                            listings.nth(i).scroll_into_view_if_needed()
+                            time.sleep(0.5) 
+                            # ----------------------------------------------
+
                             listings.nth(i).click()  # 2. Action (Clica na empresa)
-                            page.wait_for_selector('h1', timeout=5000)  # Wait for the details to load # Espera os detalhes carregarem
-
+                            
+                            # Definição do filtro (Mantido como você fez)
                             cabecalho = page.locator("h1:visible") \
-                                        .filter(has_not_text="Results") \
-                                        .filter(has_not_text="Sponsored")
+                                            .filter(has_not_text="Results") \
+                                            .filter(has_not_text="Sponsored")
 
-                            # Só pra garantir, espera ele estar visível
-                            cabecalho.first.wait_for(state="visible", timeout=5000)
+                            # --- LÓGICA ANTI-DUPLICATA (Obrigatória para funcionar) ---
+                            # No Duplicates Logic
+                            start_time = time.time()
+                            nome_empresa = ""
+                       
+                            
+                            while True:
+                                # Se passar de 5s, desiste
+                                if time.time() - start_time > 5:
+                                    break
+                                
+                                # Verifica se carregou
+                                if cabecalho.count() > 0:
+                                    # Só pra garantir, espera ele estar visível
+                                    # (Nota: O wait_for aqui dentro do loop substitui o timeout longo antigo)
+                                    texto_tela = cabecalho.first.inner_text()
+                                    
+                                    # Verifica se é válido e se mudou em relação ao anterior
+                                    if texto_tela.strip() != "" and texto_tela != ultimo_nome:
+                                        nome_empresa = texto_tela
+                                        break 
+                                
+                                time.sleep(0.1) # Loop rápido
+                            
+                            # Se falhar o clique ou o nome não mudar, pula essa volta
+                            # If Failed click or name didn't change, skip this round 
+                            if not nome_empresa or nome_empresa == ultimo_nome:
+                                print("   ⚠️ Clique falhou ou repetido. Pulando...")
+                                continue
+                            # ---------------------------------------------------------
 
-                            nome_empresa = cabecalho.first.inner_text()
-
+                            # --- EXTRAÇÃO DO ENDEREÇO ---
+                            # Adress extraction
                             address_btn = page.locator('button[data-item-id="address"]') # Looks for the button that contains the address # Procura o botão que contém o endereço
                             endereco = "Sem endereço"  # Default text if no address is found # Texto padrão se nenhum endereço for encontrado
 
-                            phone_btn = page.locator('button[data-item-id^="phone:"]')  # Locate the phone button # Localiza o botão de telefone
-                            endereco = ""  # Default text for adress before we process the data # Texto padrão para endreco anntes de processar os dados
-
                             if address_btn.count() > 0:
-                                    # O endereço completo costuma estar no 'aria-label' # The full address tend to be in aria-label
-                                    # Ex: "Address: 123 5th Ave, New York..."
+                                # O endereço completo costuma estar no 'aria-label' # The full address tend to be in aria-label
+                                # Ex: "Address: 123 5th Ave, New York..."
                                 raw_address = address_btn.get_attribute("aria-label")
-                            if raw_address:
-                                endereco = raw_address.replace("Address: ", "").strip()  # Clean the text to get just the address # Limpa o texto para obter apenas o endereço
+                                
+                                # CORREÇÃO: O if raw_address precisa estar dentro do if do botão
+                                if raw_address:
+                                    endereco = raw_address.replace("Address: ", "").strip()  # Clean the text to get just the address # Limpa o texto para obter apenas o endereço
+                            
+                            # --- EXTRAÇÃO DO TELEFONE ---
+                            phone_btn = page.locator('button[data-item-id^="phone:"]')  # Locate the phone button # Localiza o botão de telefone
+                            telefone = "Sem telefone" # Correção: Inicializa a variável antes do if para não dar erro
 
                             if phone_btn.count() > 0:  # If the phone button exists, extract the phone number # Se o botão de telefone existir, extrai o número de telefone
                                 raw_text = phone_btn.get_attribute("aria-label")  # Get the aria-label attribute which contains the phone number # Pega o atributo aria-label que contém o número de telefone
@@ -93,15 +134,18 @@ def main():
                             print(f"   🏢 Nome: {nome_empresa}")
                             print(f"   📞 Tel:  {telefone}")
                             print(f"   📍 End:  {endereco}")
+                            
+                            # Atualiza a memória # Uptade memory
+                            ultimo_nome = nome_empresa
 
                         except Exception as e:
                             print(f"   ❌ Erro nessa empresa: {e}")
+                            time.sleep(1)  # Respira um pouco entre uma e outra
 
-                        time.sleep(1)  # Respira um pouco entre uma e outra
-
-                else:
-                    # SENÃO, avisa que deu ruim
-                    print("⚠️ Não conseguimos fazer a busca. O Google não retornou nada ou o seletor mudou.")
+                    else:
+                        # SENÃO, avisa que deu ruim
+                        # ELSE, warns that something went wrong
+                        print("⚠️ Não conseguimos fazer a busca. O Google não retornou nada ou o seletor mudou.")
 
                 browser.close()  # Close the browser # Fecha o navegador
 
@@ -115,4 +159,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()  # Agora sim a função existe e pode ser chamadaqqqqq
+    main()  # Agora sim a função existe e pode ser chamada
