@@ -17,9 +17,13 @@ def monitor_stop_key():
         time.sleep(0.1)
 
 
+
+
 def main():
-    global stop_flag
-    
+    global stop_flag # For using the stop_flag variable inside the function
+   
+
+
     # Inicia thread para monitorar a tecla 'q'
     monitor_thread = threading.Thread(target=monitor_stop_key, daemon=True)
     monitor_thread.start()
@@ -27,9 +31,17 @@ def main():
     while not stop_flag:
         try:
             with sync_playwright() as pw:  # Start Playwright # Inicia o Playwright
-                browser = pw.chromium.launch(headless=False)  # Launch the browser # Inicializa o navegador # if headless= False, the browser window will be visible # Se headless= False, a janela do navegador será visível
+                browser = pw.chromium.launch(headless=True)  # Launch the browser # Inicializa o navegador # if headless= False, the browser window will be visible # Se headless= False, a janela do navegador será visível
                 context = browser.new_context(locale="en-US")  # force the Browser language to English # Força o idioma do navegador para Inglês
                 page = context.new_page()
+
+                def route_intercept(route):
+                    if route.request.resource_type in ["image", "media", "font"]:
+                        route.abort()
+                    else:
+                        route.continue_()
+
+                    page.route("**/*", route_intercept)
 
                 print("Acessando o google maps..")
                 page.goto("https://www.google.com/maps?hl=en")  # Navigate to Google maps #Vai pro google maps 
