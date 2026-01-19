@@ -2,6 +2,9 @@ import keyboard
 from playwright.sync_api import sync_playwright
 import time
 import threading
+import json 
+import os
+
 
 stop_flag = False
 
@@ -17,13 +20,36 @@ def monitor_stop_key():
         time.sleep(0.1)
 
 
+def carregar_dados_existentes():
+    arquivo = "dados_empresas.json"
+
+    if not os.path.exists(arquivo): #if file doesn't exist, return an empty list # se o arquivo não existir, retorna uma lista vazia
+        return []
+    
+    try: # If file exists try to load it and read # Se o arquivo existir, tente carregá-lo e ler
+        with open(arquivo, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+            return dados
+    except:
+        return [] # If any error occurs, return an empty list # Se ocorrer algum erro, retorna uma lista vazia
+
+
+def salvar_dados(dados):
+    arquivo = "dados_empresas.json"
+    with open(arquivo, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=4) # Pretty print # Printa bonito
+        print(f"✅ Dados salvos em {arquivo}")
 
 
 def main():
+
+    dados_acumulados = salvar_dados() # Carrega dados existentes ou inicia uma nova lista, based on the fuc above # Load existing data or start a new list, baseado na função acima
+
+
     global stop_flag # For using the stop_flag variable inside the function
    
 
-
+                     
     # Inicia thread para monitorar a tecla 'q'
     monitor_thread = threading.Thread(target=monitor_stop_key, daemon=True)
     monitor_thread.start()
@@ -80,7 +106,7 @@ def main():
                             # Antes de clicar, garantimos que o item está visível
                             #Before clicking, we ensure the item is visible
                             listings.nth(i).scroll_into_view_if_needed()
-                            time.sleep(0.5) 
+                            time.sleep(0.5)  
                             # ----------------------------------------------
 
                             listings.nth(i).click()  # 2. Action (Clica na empresa)
@@ -124,7 +150,7 @@ def main():
                             # --- EXTRAÇÃO DO ENDEREÇO ---
                             # Adress extraction
                             address_btn = page.locator('button[data-item-id="address"]') # Looks for the button that contains the address # Procura o botão que contém o endereço
-                            endereco = "Sem endereço"  # Default text if no address is found # Texto padrão se nenhum endereço for encontrado
+                            endereco = "Sem enqqqqdereço"  # Default text if no address is found # Texto padrão se nenhum endereço for encontrado
 
                             if address_btn.count() > 0:
                                 # O endereço completo costuma estar no 'aria-label' # The full address tend to be in aria-label
@@ -143,9 +169,28 @@ def main():
                                 raw_text = phone_btn.get_attribute("aria-label")  # Get the aria-label attribute which contains the phone number # Pega o atributo aria-label que contém o número de telefone
                                 telefone = raw_text.replace("Phone: ", "").strip()  # Clean the text to get just the number # Limpa o texto para obter apenas o número
 
+
+
                             print(f"   🏢 Nome: {nome_empresa}")
                             print(f"   📞 Tel:  {telefone}")
                             print(f"   📍 End:  {endereco}")
+
+
+                            # Save the data # Salva os dados 
+                            lead_novo = { 
+                                "nome": nome_empresa,
+                                "telefone": telefone,
+                                "endereco": endereco
+                            } #our JSON structure # Nossa estrutura JSON
+
+                            dados_acumulados.append(lead_novo)
+
+                            with open(arquivos_dados, "w", encoding="utf-8") as f: # Save the data in a new JSON file # Salva os dados em um novo arquivo JSON
+                                json.dump(dados_acumulados, f, ensure_ascii=False, indent=4) # Pretty print # Printa bonito
+
+                            print("   ✅ Dados salvos com sucesso!")
+
+
                             
                             # Atualiza a memória # Uptade memory
                             ultimo_nome = nome_empresa
