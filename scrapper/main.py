@@ -4,9 +4,170 @@ import time
 import threading
 import json 
 import os
+from dotenv import load_dotenv
+import psycopg2
+
+
+
+
+USER = os.getenv("user")
+PASSWORD = os.getenv("password")
+HOST = os.getenv("host")
+PORT = os.getenv("port")
+DBNAME = os.getenv("dbname")
+
+
+
+load_dotenv()  # Carrega variáveis de ambiente do arquivo .env # Load environment variables from .env file 
+
+# Function to insert a single company directly into Supabase
+def insert_empresa_supabase(nome, telefone, endereco):
+    """Insere uma empresa diretamente no Supabase quando é coletada"""
+    conn = None
+    cursor = None
+
+    user = os.getenv("user")
+    password = os.getenv("password")
+    host = os.getenv("host")
+    port = os.getenv("port")
+    database = os.getenv("database")
+    
+
+    try:
+        connection = psycopg2.connect(
+        user=user,
+        password=password,
+        host=host,
+        port=port,
+        dbname=database,
+        )
+        print("Connection successful!")
+    
+        cursor = connection.cursor()
+        cursor.execute("SELECT NOW();")
+        result = cursor.fetchone()
+        print("Current Time:", result)
+
+    except Exception as e:
+        print(f"Failed to connect: {e}")
+
+
+
+        cursor = connection.cursor()
+
+        # Create table if it doesn't exist
+    cursor.execute('''
+            CREATE TABLE IF NOT EXISTS empresas (
+                id SERIAL PRIMARY KEY,
+                nome TEXT NOT NULL,
+                telefone TEXT,
+                endereco TEXT,
+                origem_busca TEXT DEFAULT 'Google Maps',
+                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+    connection.commit()
+
+        # Insert the company
+    cursor.execute('''
+            INSERT INTO empresas (nome, telefone, endereco, origem_busca)
+            VALUES (%s, %s, %s, %s)
+        ''', (nome, telefone, endereco, 'Google Maps'))
+        
+    connection.commit()
+    print(f"      ☁️  Salvo no Supabase!")
+    return True
+        
+ 
+
+# Function to migrate all data from JSON to Supabase (batch migration)
+def migrar_agorar():
+    """Migra todos os dados do JSON para o Supabase de uma vez"""
+    print("\n🚀 Iniciando migração em lote do Supabase...")
+    conn = None
+    cursor = None
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv("host"),
+            database=os.getenv("database"),
+            user=os.getenv("user"),
+            password=os.getenv("password"),
+            port=int(os.getenv("port", 5432))
+        )
+
+        cursor = conn.cursor()
+        print("✅ Conectado no Supabase com sucesso!")
+        
+        # Create table if it doesn't exist
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS empresas (
+                id SERIAL PRIMARY KEY,
+                nome TEXT NOT NULL UNIQUE,
+                telefone TEXT,
+                endereco TEXT,
+                origem_busca TEXT DEFAULT 'Google Maps',
+                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+        conn.commit()
+
+        arquivo_json = "dados_empresas.json"
+        if not os.path.exists(arquivo_json):
+            print("❌ Arquivo JSON não encontrado. Rode o scraper primeiro.")
+            return
+        
+        with open(arquivo_json, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+
+        print(f"🔄 Migrando {len(dados)} registros para o Supabase...")
+
+        novos = 0
+        duplicados = 0
+
+        for empresa in dados:
+            try:
+                cursor.execute('''
+                    INSERT INTO empresas (nome, telefone, endereco, origem_busca)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (nome) DO NOTHING;
+                ''', (
+                    empresa.get("nome"),
+                    empresa.get("telefone"),
+                    empresa.get("endereco"),
+                    'Google Maps'
+                ))
+                
+                if cursor.rowcount > 0:
+                    novos += 1
+                else:
+                    duplicados += 1
+                    
+            except Exception as e:
+                print(f"❌ Erro ao inserir {empresa.get('nome')}: {e}")
+                conn.rollback()
+                continue
+        
+        conn.commit()   
+        print(f"\n✅ Migração concluída!")
+        print(f"   📊 {novos} novos registros adicionados")
+        print(f"   ⚠️  {duplicados} registros duplicados ignorados")
+                
+    except Exception as e:
+        print(f"❌ Erro na conexão ou migração: {e}")
+        print("Verifique suas credenciais no arquivo .env e a conexão com a internet.")
+        if conn:
+            conn.rollback()
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
 
 
 stop_flag = False
+
 
 
 def monitor_stop_key():
@@ -43,7 +204,8 @@ def salvar_dados(dados):
 
 def main():
 
-    dados_acumulados = salvar_dados() # Carrega dados existentes ou inicia uma nova lista, based on the fuc above # Load existing data or start a new list, baseado na função acima
+    arquivos_dados = "dados_empresas.json"
+    dados_acumulados = carregar_dados_existentes() # Carrega dados existentes ou inicia uma nova lista, based on the fuc above # Load existing data or start a new list, baseado na função acima
 
 
     global stop_flag # For using the stop_flag variable inside the function
@@ -188,13 +350,13 @@ def main():
                             with open(arquivos_dados, "w", encoding="utf-8") as f: # Save the data in a new JSON file # Salva os dados em um novo arquivo JSON
                                 json.dump(dados_acumulados, f, ensure_ascii=False, indent=4) # Pretty print # Printa bonito
 
-                            print("   ✅ Dados salvos com sucesso!")
+                            print("   ✅ Dados salvos em JSON!")
 
-
+                            # Save directly to Supabase
+                            insert_empresa_supabase(nome_empresa, telefone, endereco)
                             
                             # Atualiza a memória # Uptade memory
                             ultimo_nome = nome_empresa
-
                         except Exception as e:
                             print(f"   ❌ Erro nessa empresa: {e}")
                             time.sleep(1)  # Respira um pouco entre uma e outra
@@ -205,11 +367,13 @@ def main():
                         print("⚠️ Não conseguimos fazer a busca. O Google não retornou nada ou o seletor mudou.")
 
                 browser.close()  # Close the browser # Fecha o navegador
+                break # Exit the while loop after one complete run # Sai do loop while após uma execução completa
 
-                print("Fechou!")
+            print("Fechou!")
 
         except Exception as e:
             print(f"❌ Erro geral: {e}")
+
 
         if stop_flag:
             break
