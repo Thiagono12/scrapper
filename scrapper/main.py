@@ -20,148 +20,34 @@ DBNAME = os.getenv("dbname")
 
 load_dotenv()  # Carrega variáveis de ambiente do arquivo .env # Load environment variables from .env file 
 
-# Function to insert a single company directly into Supabase
-def insert_empresa_supabase(nome, telefone, endereco):
-    """Insere uma empresa diretamente no Supabase quando é coletada"""
-    conn = None
-    cursor = None
 
-    user = os.getenv("user")
-    password = os.getenv("password")
-    host = os.getenv("host")
-    port = os.getenv("port")
-    database = os.getenv("database")
-    
 
+
+def conectar_banco(tentativas=0): #funcão para conectar ao banco de dados, com tentativas de reconexão #function to connect to the database, with reconnection attempts
+    cur = None
     try:
-        connection = psycopg2.connect(
-        user=user,
-        password=password,
-        host=host,
-        port=port,
-        dbname=database,
-        )
-        print("Connection successful!")
-    
-        cursor = connection.cursor()
-        cursor.execute("SELECT NOW();")
-        result = cursor.fetchone()
-        print("Current Time:", result)
-
+        conn = psycopg2.connect(...)
     except Exception as e:
-        print(f"Failed to connect: {e}")
+        print(f"Erro ao conectar ao Supabase: {e}")
+    
+    if tentativas < 2:
+        print(f"tentando reconectar ... {tentativas + 1}/2")
+        time.sleep(2)  # Espera 2 segundos antes de tentar reconectar # Wait 2 seconds before trying to reconnect
+        return conectar_banco(tentativas + 1) # call himself with the number of attempts +1 # se reconectar, chama ele mesmo com o número de tentativas +1
+    else:
+        print("Não foi possível conectar ao Supabase após 2 tentativas. Verifique as credenciais e a conexão.")
+        return None, None  # Retorna None se não conseguir conectar após 2 tentativas # Return None if it can't connect after 2 attempts
 
 
 
-        cursor = connection.cursor()
+def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao para inserir empresa com o id da busca #new function to insert company with the search id
+    pass    
 
-        # Create table if it doesn't exist
-    cursor.execute('''
-            CREATE TABLE IF NOT EXISTS empresas (
-                id SERIAL PRIMARY KEY,
-                nome TEXT NOT NULL,
-                telefone TEXT,
-                endereco TEXT,
-                origem_busca TEXT DEFAULT 'Google Maps',
-                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        ''')
-    connection.commit()
-
-        # Insert the company
-    cursor.execute('''
-            INSERT INTO empresas (nome, telefone, endereco, origem_busca)
-            VALUES (%s, %s, %s, %s)
-        ''', (nome, telefone, endereco, 'Google Maps'))
-        
-    connection.commit()
-    print(f"      ☁️  Salvo no Supabase!")
-    return True
-        
  
 
-# Function to migrate all data from JSON to Supabase (batch migration)
-def migrar_agorar():
-    """Migra todos os dados do JSON para o Supabase de uma vez"""
-    print("\n🚀 Iniciando migração em lote do Supabase...")
-    conn = None
-    cursor = None
-    try:
-        conn = psycopg2.connect(
-            host=os.getenv("host"),
-            database=os.getenv("database"),
-            user=os.getenv("user"),
-            password=os.getenv("password"),
-            port=int(os.getenv("port", 5432))
-        )
 
-        cursor = conn.cursor()
-        print("✅ Conectado no Supabase com sucesso!")
-        
-        # Create table if it doesn't exist
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS empresas (
-                id SERIAL PRIMARY KEY,
-                nome TEXT NOT NULL UNIQUE,
-                telefone TEXT,
-                endereco TEXT,
-                origem_busca TEXT DEFAULT 'Google Maps',
-                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        ''')
-        conn.commit()
 
-        arquivo_json = "dados_empresas.json"
-        if not os.path.exists(arquivo_json):
-            print("❌ Arquivo JSON não encontrado. Rode o scraper primeiro.")
-            return
-        
-        with open(arquivo_json, "r", encoding="utf-8") as f:
-            dados = json.load(f)
 
-        print(f"🔄 Migrando {len(dados)} registros para o Supabase...")
-
-        novos = 0
-        duplicados = 0
-
-        for empresa in dados:
-            try:
-                cursor.execute('''
-                    INSERT INTO empresas (nome, telefone, endereco, origem_busca)
-                    VALUES (%s, %s, %s, %s)
-                    ON CONFLICT (nome) DO NOTHING;
-                ''', (
-                    empresa.get("nome"),
-                    empresa.get("telefone"),
-                    empresa.get("endereco"),
-                    'Google Maps'
-                ))
-                
-                if cursor.rowcount > 0:
-                    novos += 1
-                else:
-                    duplicados += 1
-                    
-            except Exception as e:
-                print(f"❌ Erro ao inserir {empresa.get('nome')}: {e}")
-                conn.rollback()
-                continue
-        
-        conn.commit()   
-        print(f"\n✅ Migração concluída!")
-        print(f"   📊 {novos} novos registros adicionados")
-        print(f"   ⚠️  {duplicados} registros duplicados ignorados")
-                
-    except Exception as e:
-        print(f"❌ Erro na conexão ou migração: {e}")
-        print("Verifique suas credenciais no arquivo .env e a conexão com a internet.")
-        if conn:
-            conn.rollback()
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
 
 
 
