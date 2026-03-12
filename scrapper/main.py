@@ -41,10 +41,52 @@ def conectar_banco(tentativas=0): #funcão para conectar ao banco de dados, com 
 
 
 def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao para inserir empresa com o id da busca #new function to insert company with the search id
-    pass    
+    conn = None
+    cursor = None
+    conn = conectar_banco() # Tenta conectar ao banco de dados # Try to connect to the database
+    if conn is None:
+        print("Não foi possível conectar ao banco de dados. Empresa não inserida.")
+        return
+    try:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO empresas (nome, telefone))
+                    VALUES (%s, %s) ,''' 
+                       (nome, telefone))
+      
+        partes = endereco_str.split(",")  # Divide o endereço em partes usando a vírgula como separador # Split the address into parts using the comma as a separator
+        rua        = partes[0] if len(partes) > 0 else None
+        cidade     = partes[1] if len(partes) > 1 else None
+        estado_cep = partes[2].split(" ") if len(partes) > 2 else []
+        estado     = estado_cep[0] if len(estado_cep) > 0 else None
+        cep        = estado_cep[1] if len(estado_cep) > 1 else None
+        
+        empresa_id = cursor.fetchone()[0]  # Obtém o ID da empresa recém-inserida # Get the ID of the newly inserted company
+        
+        cursor.execute('''
+            INSERT INTO enderecos (empresa_id, rua, cidade, estado, cep)
+            VALUES (%s, %s, %s, %s, %s)''',
+                (empresa_id, rua, cidade, estado, cep)
+        )
 
- 
-
+        cursor.execute('''
+            INSERT INTO buscas_empresas (busca_id, empresa_id)
+                       VALUES (%s, %s)
+''', (empresa_id, busca_id))
+        
+        conn.commit()
+        print(f"✅ Empresa '{nome}' inserida no Supabase com ID {empresa_id}!")
+    
+    
+    except Exception as e:
+        print(f"❌ Erro ao inserir empresa '{nome}': {e}")
+        conn.rollback()  # Desfaz a transação em caso de erro # Rollback the transaction in case of error
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 
 
@@ -89,6 +131,8 @@ def salvar_dados(dados):
 
 
 def main():
+
+    busca_id = registrar_busca("Google Maps", "Dentist in New York") # Registra a busca e obtém o ID para relacionar as empresas # Register the search and get the ID to relate the companies
 
     arquivos_dados = "dados_empresas.json"
     dados_acumulados = carregar_dados_existentes() # Carrega dados existentes ou inicia uma nova lista, based on the fuc above # Load existing data or start a new list, baseado na função acima
