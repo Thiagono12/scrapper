@@ -72,7 +72,7 @@ def inserir_empresa_supabase(nome, telefone, endereco_str, busca_id): #nova fuca
         cep        = estado_cep[1] if len(estado_cep) > 1 else None
         
 
-        
+
         cursor.execute('''
             INSERT INTO enderecos (empresa_id, rua, cidade, estado, cep)
             VALUES (%s, %s, %s, %s, %s)''',
@@ -357,3 +357,6 @@ def main():
 
 if __name__ == "__main__":
     main()  # Agora sim a função existe e pode ser chamada
+
+
+#codando
