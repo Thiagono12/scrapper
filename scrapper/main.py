@@ -9,24 +9,30 @@ import psycopg2
 
 
 
-
+load_dotenv() # Carrega variáveis de ambiente do arquivo .env # Load environment variables from .env file 
 USER = os.getenv("user")
 PASSWORD = os.getenv("password")
 HOST = os.getenv("host")
 PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
+DATABASE = os.getenv("database")
 
 
-
-load_dotenv()  # Carrega variáveis de ambiente do arquivo .env # Load environment variables from .env file 
 
 
 
 
 def conectar_banco(tentativas=0): #funcão para conectar ao banco de dados, com tentativas de reconexão #function to connect to the database, with reconnection attempts
     cur = None
+    conn = None
     try:
-        conn = psycopg2.connect(...)
+        conn = psycopg2.connect(
+            host=os.getenv("host"),
+            dbname=os.getenv("dbname"),
+            user=os.getenv("user"),
+            password=os.getenv("password"),
+            port=os.getenv("port")
+        )
+        return conn
     except Exception as e:
         print(f"Erro ao conectar ao Supabase: {e}")
     
@@ -36,11 +42,11 @@ def conectar_banco(tentativas=0): #funcão para conectar ao banco de dados, com 
         return conectar_banco(tentativas + 1) # call himself with the number of attempts +1 # se reconectar, chama ele mesmo com o número de tentativas +1
     else:
         print("Não foi possível conectar ao Supabase após 2 tentativas. Verifique as credenciais e a conexão.")
-        return None, None  # Retorna None se não conseguir conectar após 2 tentativas # Return None if it can't connect after 2 attempts
+        return None # Retorna None se não conseguir conectar após 2 tentativas # Return None if it can't connect after 2 attempts
 
 
 
-def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao para inserir empresa com o id da busca #new function to insert company with the search id
+def inserir_empresa_supabase(nome, telefone, endereco_str, busca_id): #nova fucao para inserir empresa com o id da busca #new function to insert company with the search id
     conn = None
     cursor = None
     conn = conectar_banco() # Tenta conectar ao banco de dados # Try to connect to the database
@@ -50,10 +56,14 @@ def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao pa
     try:
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO empresas (nome, telefone))
-                    VALUES (%s, %s) ,''' 
+            INSERT INTO empresas (nome, telefone)
+                    VALUES (%s, %s) 
+                       RETURNING id''',
                        (nome, telefone))
       
+        empresa_id = cursor.fetchone()[0]  # Obtém o ID da empresa recém-inserida # Get the ID of the newly inserted company
+        conn.commit()  # Confirma a transação # Commit the transaction
+
         partes = endereco_str.split(",")  # Divide o endereço em partes usando a vírgula como separador # Split the address into parts using the comma as a separator
         rua        = partes[0] if len(partes) > 0 else None
         cidade     = partes[1] if len(partes) > 1 else None
@@ -61,7 +71,7 @@ def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao pa
         estado     = estado_cep[0] if len(estado_cep) > 0 else None
         cep        = estado_cep[1] if len(estado_cep) > 1 else None
         
-        empresa_id = cursor.fetchone()[0]  # Obtém o ID da empresa recém-inserida # Get the ID of the newly inserted company
+
         
         cursor.execute('''
             INSERT INTO enderecos (empresa_id, rua, cidade, estado, cep)
@@ -70,9 +80,9 @@ def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao pa
         )
 
         cursor.execute('''
-            INSERT INTO buscas_empresas (busca_id, empresa_id)
+            INSERT INTO empresas_buscas (busca_id, empresa_id)
                        VALUES (%s, %s)
-''', (empresa_id, busca_id))
+''', (busca_id, empresa_id))
         
         conn.commit()
         print(f"✅ Empresa '{nome}' inserida no Supabase com ID {empresa_id}!")
@@ -88,6 +98,42 @@ def inserir_empresa_supabase(nome, telefone, endereco, busca_id): #nova fucao pa
         if conn:
             conn.close()
 
+
+def registrar_busca(termo, cidade):
+    conn = None
+    cursor = None        # ← cursor
+    
+    conn = conectar_banco()
+    
+    if conn is None:
+        print("❌ Sem conexão.")
+        return None
+    
+    try:
+        cursor = conn.cursor()  # ← cursor
+        
+        cursor.execute('''
+            INSERT INTO buscas (termo, cidade)
+            VALUES (%s, %s)
+            RETURNING id
+        ''', (termo, cidade))
+        
+        busca_id = cursor.fetchone()[0]  # ← cursor
+        conn.commit()
+        
+        print(f"🔍 Busca registrada! ID: {busca_id}")
+        return busca_id
+        
+    except Exception as e:
+        print(f"❌ Erro ao registrar busca: {e}")
+        conn.rollback()
+        return None
+        
+    finally:
+        if cursor:       # ← cursor
+            cursor.close()
+        if conn:
+            conn.close()
 
 
 
@@ -132,7 +178,7 @@ def salvar_dados(dados):
 
 def main():
 
-    busca_id = registrar_busca("Google Maps", "Dentist in New York") # Registra a busca e obtém o ID para relacionar as empresas # Register the search and get the ID to relate the companies
+    busca_id = registrar_busca("Dentist", "New York") # Registra a busca e obtém o ID para relacionar as empresas # Register the search and get the ID to relate the companies
 
     arquivos_dados = "dados_empresas.json"
     dados_acumulados = carregar_dados_existentes() # Carrega dados existentes ou inicia uma nova lista, based on the fuc above # Load existing data or start a new list, baseado na função acima
@@ -283,7 +329,7 @@ def main():
                             print("   ✅ Dados salvos em JSON!")
 
                             # Save directly to Supabase
-                            insert_empresa_supabase(nome_empresa, telefone, endereco)
+                            inserir_empresa_supabase(nome_empresa, telefone, endereco, busca_id)
                             
                             # Atualiza a memória # Uptade memory
                             ultimo_nome = nome_empresa
