@@ -176,9 +176,9 @@ def salvar_dados(dados):
         print(f"✅ Dados salvos em {arquivo}")
 
 
-def main():
+def main(termo, cidade):
 
-    busca_id = registrar_busca("Dentist", "New York") # Registra a busca e obtém o ID para relacionar as empresas # Register the search and get the ID to relate the companies
+    busca_id = registrar_busca(termo, cidade) # Registra a busca e obtém o ID para relacionar as empresas # Register the search and get the ID to relate the companies
 
     arquivos_dados = "dados_empresas.json"
     dados_acumulados = carregar_dados_existentes() # Carrega dados existentes ou inicia uma nova lista, based on the fuc above # Load existing data or start a new list, baseado na função acima
@@ -211,7 +211,7 @@ def main():
                 page.goto("https://www.google.com/maps?hl=en")  # Navigate to Google maps #Vai pro google maps 
 
                 print("Pesquisando")
-                page.get_by_label("Search Google Maps").fill("Dentist in New York")  # Fill the search box with what comes in the quotes "fill" means to type in the search box # Preenche a caixa de pesquisa com o que vem entre aspas "fill" significa digitar na caixa de pesquisa
+                page.get_by_label("Search Google Maps").fill(f"{termo} in {cidade}")  # Fill the search box with what comes in the quotes "fill" means to type in the search box # Preenche a caixa de pesquisa com o que vem entre aspas "fill" significa digitar na caixa de pesquisa
                 page.keyboard.press("Enter")  # Press Enter to search # Aperta Enter para pesquisar
                 print("Aguardando resultados...")
 
@@ -355,8 +355,7 @@ def main():
             break
 
 
-if __name__ == "__main__":
-    main()  # Agora sim a função existe e pode ser chamada
+
 
 
 #codando
