@@ -1,14 +1,11 @@
 from fastapi import FastAPI, BackgroundTasks
 import httpx
 from pydantic import BaseModel
-# ❌ atual
-from main import main
-
 # ✅ correto
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-from main import main
+from scrapper.main import main 
 
 
 app = FastAPI() #initialize FastAPI app #inicia FastAPI app
@@ -18,7 +15,7 @@ class BuscaRequest(BaseModel): #defining a Pydantic model for the search request
     termo: str
     cidade : str
     webhook_url: str
-    
+
 
 
 @app.post("/buscar") #using a decorater to define a POST endpoint at "/buscar" #definir um endpoint POST em "/buscar"
