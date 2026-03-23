@@ -4,12 +4,13 @@ import time
 import threading
 import json 
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 import psycopg2
 
 
 
-load_dotenv() # Carrega variáveis de ambiente do arquivo .env # Load environment variables from .env file 
+load_dotenv(Path(__file__).parent / ".env") # Carrega variáveis de ambiente do arquivo .env # Load environment variables from .env file 
 USER = os.getenv("user")
 PASSWORD = os.getenv("password")
 HOST = os.getenv("host")
@@ -27,7 +28,7 @@ def conectar_banco(tentativas=0): #funcão para conectar ao banco de dados, com 
     try:
         conn = psycopg2.connect(
             host=os.getenv("host"),
-            dbname=os.getenv("dbname"),
+            database=os.getenv("database"),
             user=os.getenv("user"),
             password=os.getenv("password"),
             port=os.getenv("port")
@@ -58,8 +59,17 @@ def inserir_empresa_supabase(nome, telefone, endereco_str, busca_id): #nova fuca
         cursor.execute('''
             INSERT INTO empresas (nome, telefone)
                     VALUES (%s, %s) 
+                     ON CONFLICT (nome, telefone) DO NOTHING
                        RETURNING id''',
                        (nome, telefone))
+        resultado = cursor.fetchone()
+        if resultado is None:
+            cursor.execute( '''
+                           SELECT id From empresas 
+                           where nome = %s and telefone = %s, ''' , 
+                           (nome, telefone))
+            resultado = cursor.fetchone()
+            
       
         empresa_id = cursor.fetchone()[0]  # Obtém o ID da empresa recém-inserida # Get the ID of the newly inserted company
         conn.commit()  # Confirma a transação # Commit the transaction

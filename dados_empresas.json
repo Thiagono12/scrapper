@@ -678,5 +678,120 @@
         "nome": "Dentique NYC",
         "telefone": "+1 212-889-8870",
         "endereco": "274 Madison Ave #1702, New York, NY 10016, United States"
+    },
+    {
+        "nome": "Clube Chalezinho",
+        "telefone": "(31) 3286-3155",
+        "endereco": "Av. Professor Mário Werneck, 530 - Estoril, Belo Horizonte - MG, 30455-610"
+    },
+    {
+        "nome": "A OBRA Bar Dançante",
+        "telefone": "Sem telefone",
+        "endereco": "R. Rio Grande do Norte, 1168 - Savassi, Belo Horizonte - MG, 30130-131"
+    },
+    {
+        "nome": "Pub Major Lock",
+        "telefone": "(31) 99221-8176",
+        "endereco": "Rua dos Guajajaras, 842 - Centro, Belo Horizonte - MG, 30140-100"
+    },
+    {
+        "nome": "Rust Music Bar",
+        "telefone": "(31) 99981-9741",
+        "endereco": "Av. Professor Mário Werneck, 50 - Estoril, Belo Horizonte - MG, 30455-610"
+    },
+    {
+        "nome": "Boate Capricornios 2025",
+        "telefone": "(31) 99418-5991",
+        "endereco": "Rua dos Carijós, 840 - Centro, Belo Horizonte - MG, 30120-060"
+    },
+    {
+        "nome": "Stop Girls",
+        "telefone": "(31) 98314-6883",
+        "endereco": "Av. Amazonas, 1523 - Barro Preto, Belo Horizonte - MG, 30180-002"
+    },
+    {
+        "nome": "AREA51 BH",
+        "telefone": "(31) 98935-2210",
+        "endereco": "Av. do Contorno, 10684 - Barro Preto, Belo Horizonte - MG, 38082-049"
+    },
+    {
+        "nome": "Bolota Show - Casa Noturna",
+        "telefone": "(31) 3201-7810",
+        "endereco": "Av. Afonso Pena, 526 - Centro, Belo Horizonte - MG, 30120-070"
+    },
+    {
+        "nome": "Mira!",
+        "telefone": "Sem telefone",
+        "endereco": "R. Rio de Janeiro, 600 - 25º Andar - Centro, Belo Horizonte - MG, 30060-080"
+    },
+    {
+        "nome": "Sauna Olimpo BH",
+        "telefone": "(31) 3335-4188",
+        "endereco": "Rua dos Timbiras, 2635 - Santo Agostinho, Belo Horizonte - MG, 30140-061"
+    },
+    {
+        "nome": "Observatório",
+        "telefone": "(31) 3286-3581",
+        "endereco": "R. Sen. Milton Campos, 230 - Vila da Serra, Nova Lima - MG, 34000-000"
+    },
+    {
+        "nome": "Casa de Shows",
+        "telefone": "(31) 98789-4024",
+        "endereco": "Av. Olegário Maciel, 583 - Centro, Belo Horizonte - MG, 30160-041"
+    },
+    {
+        "nome": "Bar da Cácia",
+        "telefone": "(31) 3222-3260",
+        "endereco": "R. Rio de Janeiro, 1411 - Centro, Belo Horizonte - MG, 30160-041"
+    },
+    {
+        "nome": "Casa Matriz BH",
+        "telefone": "Sem telefone",
+        "endereco": "Ao lado do - R. Espírito Santo, número 1275 - Centro, Belo Horizonte - MG, 30170-001"
+    },
+    {
+        "nome": "Casa Sapucaí",
+        "telefone": "Sem telefone",
+        "endereco": "R. Sapucaí, 303 - Floresta, Belo Horizonte - MG, 30150-050"
+    },
+    {
+        "nome": "Euphoria Club Bh - Casa de Swing/Liberal",
+        "telefone": "(31) 98896-0093",
+        "endereco": "R. Nelson, 22 - União, Belo Horizonte - MG, 31160-310"
+    },
+    {
+        "nome": "Dédalos Bar BH",
+        "telefone": "(11) 94383-3489",
+        "endereco": "R. São Paulo, 1735 - Lourdes, Belo Horizonte - MG, 30170-135"
+    },
+    {
+        "nome": "Laicos Bar Savassi",
+        "telefone": "(31) 98694-3231",
+        "endereco": "R. Ceará, 1560 - Savassi, Belo Horizonte - MG, 30150-310"
+    },
+    {
+        "nome": "LIMOUSINE BUS - ÔNIBUS BALADA DE BH",
+        "telefone": "(31) 99737-9676",
+        "endereco": "R. Campo Formoso, 544 - Salgado Filho, Belo Horizonte - MG, 30550-360"
+    },
+    {
+        "nome": "Montê Bar - Restaurante",
+        "telefone": "(31) 98309-7265",
+        "endereco": "Praça Rui Barbosa, 104 - Centro, Belo Horizonte - MG, 30160-000"
+    },
+    {
+        "nome": "Deputamadre Club",
+        "telefone": "Sem telefone",
+        "endereco": "Av. do Contorno, 2026 - Floresta, Belo Horizonte - MG, 30110-017"
+    },
+    {
+        "nome": "Hotel Londres",
+        "telefone": "Sem telefone",
+        "endereco": "Av. Santos Dumont, 240 - Centro, Belo Horizonte - MG, 30111-040"
+    },
+    {
+        "nome": "No Alto",
+        "telefone": "(31) 98506-4184",
+        "endereco": "R. dos Tamóios, 200 - 24º andar - Centro, Belo Horizonte - MG, 30120-050"
     }
 ]
