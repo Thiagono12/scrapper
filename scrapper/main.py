@@ -66,12 +66,12 @@ def inserir_empresa_supabase(nome, telefone, endereco_str, busca_id): #nova fuca
         if resultado is None:
             cursor.execute( '''
                            SELECT id From empresas 
-                           where nome = %s and telefone = %s, ''' , 
+                           where nome = %s and telefone = %s ''' , 
                            (nome, telefone))
             resultado = cursor.fetchone()
             
       
-        empresa_id = cursor.fetchone()[0]  # Obtém o ID da empresa recém-inserida # Get the ID of the newly inserted company
+        empresa_id = resultado[0]  # Obtém o ID da empresa recém-inserida # Get the ID of the newly inserted company
         conn.commit()  # Confirma a transação # Commit the transaction
 
         partes = endereco_str.split(",")  # Divide o endereço em partes usando a vírgula como separador # Split the address into parts using the comma as a separator
