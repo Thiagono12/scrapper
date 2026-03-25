@@ -8,10 +8,19 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from scrapper.main import main 
 from dotenv import load_dotenv
 from pathlib import Path
+from fastapi.middleware.cors import CORSMiddleware
 from scrapper.main import conectar_banco
 
 
 app = FastAPI() #initialize FastAPI app #inicia FastAPI app
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],      # ← aceita qualquer origem # Accept any origin
+    allow_methods=["*"],      # ← aceita qualquer método # Accept any method
+    allow_headers=["*"],      # ← aceita qualquer header # Accept any header
+)
+
 
 
 

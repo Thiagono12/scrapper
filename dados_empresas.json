@@ -933,5 +933,155 @@
         "nome": "Rust Music Bar",
         "telefone": "(31) 99981-9741",
         "endereco": "Av. Professor Mário Werneck, 50 - Estoril, Belo Horizonte - MG, 30455-610"
+    },
+    {
+        "nome": "Tizé Bar e Butequim",
+        "telefone": "(31) 3654-7412",
+        "endereco": "R. Curitiba, 2205 - Lourdes, Belo Horizonte - MG, 30170-135"
+    },
+    {
+        "nome": "Restaurante Casa da Madrinha",
+        "telefone": "(31) 3047-4787",
+        "endereco": "Av. Barbacena, 212 - Barro Preto, Belo Horizonte - MG, 30190-130"
+    },
+    {
+        "nome": "Redentor Bar",
+        "telefone": "(31) 3568-8469",
+        "endereco": "R. Fernandes Tourinho, 500 - Savassi, Belo Horizonte - MG, 30112-004"
+    },
+    {
+        "nome": "Caverna Rock Pub",
+        "telefone": "(31) 99238-7499",
+        "endereco": "Rua dos Tupis, 1448 - Barro Preto, Belo Horizonte - MG, 30190-062"
+    },
+    {
+        "nome": "Bar da Esquina",
+        "telefone": "(31) 3224-1772",
+        "endereco": "R. Sergipe, 146 - Centro, Belo Horizonte - MG, 30130-170"
+    },
+    {
+        "nome": "Laicos Bar Savassi",
+        "telefone": "(31) 98694-3231",
+        "endereco": "R. Ceará, 1560 - Savassi, Belo Horizonte - MG, 30150-310"
+    },
+    {
+        "nome": "Why American Pub",
+        "telefone": "Sem telefone",
+        "endereco": "Av: Francisco Sá, 66 - Prado, Belo Horizonte - MG, 31411-145"
+    },
+    {
+        "nome": "Bardo Folk (Folk pub)",
+        "telefone": "(31) 93620-9446",
+        "endereco": "Rua dos Timbiras, 2041 - Lourdes, Belo Horizonte - MG, 30140-061"
+    },
+    {
+        "nome": "Jângal",
+        "telefone": "(31) 99801-5182",
+        "endereco": "R. Outono, 523 - Cruzeiro, Belo Horizonte - MG, 30310-020"
+    },
+    {
+        "nome": "Paco Pigalle Bar",
+        "telefone": "(31) 99809-1014",
+        "endereco": "Av. Francisco Sá, 126 - Prado, Belo Horizonte - MG, 30411-145"
+    },
+    {
+        "nome": "Botequim Sapucai",
+        "telefone": "Sem telefone",
+        "endereco": "R. Sapucaí, 527 - Floresta, Belo Horizonte - MG, 30150-050"
+    },
+    {
+        "nome": "Underground Black Pub",
+        "telefone": "Sem telefone",
+        "endereco": "Av. Itaú, 540A - Jardim São José, Belo Horizonte - MG, 30535-012"
+    },
+    {
+        "nome": "Barbazul (O Barba)",
+        "telefone": "Sem telefone",
+        "endereco": "Av. Getúlio Vargas, 216 - Funcionários, Belo Horizonte - MG, 30112-020"
+    },
+    {
+        "nome": "Laicos Bar Sapucaí",
+        "telefone": "(31) 98694-3231",
+        "endereco": "R. Sapucaí, 157 - Floresta, Belo Horizonte - MG, 30110-009"
+    },
+    {
+        "nome": "Bar e Restaurante Brito Melo",
+        "telefone": "(31) 3295-5572",
+        "endereco": "Rua Tenente Brito Melo, 71 - Barro Preto, Belo Horizonte - MG, 30180-070"
+    },
+    {
+        "nome": "Cabernet Butiquim",
+        "telefone": "(31) 98447-4102",
+        "endereco": "R. Levindo Lopes, 22 - Funcionários, Belo Horizonte - MG, 30140-170"
+    },
+    {
+        "nome": "Arcos Bar",
+        "telefone": "(31) 98337-2976",
+        "endereco": "R. da Bahia, 1144 - Centro, Belo Horizonte - MG, 30160-011"
+    },
+    {
+        "nome": "Chopperhead Garage Rock Bar",
+        "telefone": "(31) 98430-4996",
+        "endereco": "R. Cássia, 26 - Prado, Belo Horizonte - MG, 30411-140"
+    },
+    {
+        "nome": "Birosca Restaurante & Deli",
+        "telefone": "Sem telefone",
+        "endereco": "R. São Paulo, 2003 - Lourdes, Belo Horizonte - MG, 30170-135"
+    },
+    {
+        "nome": "The Bridge Pub",
+        "telefone": "Sem telefone",
+        "endereco": "Rua dos Timbiras, 834 - Funcionários, Belo Horizonte - MG, 30140-060"
+    },
+    {
+        "nome": "Antonio's Bar",
+        "telefone": "(31) 3221-2099",
+        "endereco": "R. Flórida, 15 - Sion, Belo Horizonte - MG, 30310-710"
+    },
+    {
+        "nome": "Bar do Lopes | Bar na Savassi",
+        "telefone": "Sem telefone",
+        "endereco": "R. Antônio de Albuquerque, 969 - Savassi, Belo Horizonte - MG, 30112-011"
+    },
+    {
+        "nome": "Montê Bar - Restaurante",
+        "telefone": "(31) 98309-7265",
+        "endereco": "Praça Rui Barbosa, 104 - Centro, Belo Horizonte - MG, 30160-000"
+    },
+    {
+        "nome": "Banzai Bar",
+        "telefone": "(31) 3272-7559",
+        "endereco": "R. Padre Belchior, 550 - Centro, Belo Horizonte - MG, 30190-070"
+    },
+    {
+        "nome": "Bar Fortaleza",
+        "telefone": "Sem telefone",
+        "endereco": "Av. Augusto de Lima, 744 - Loja 09 - Centro, Belo Horizonte - MG, 30190-922"
+    },
+    {
+        "nome": "Em Casa - Music e Drink",
+        "telefone": "(31) 99516-2019",
+        "endereco": "Av. Francisco Sá, 1 - Prado, Belo Horizonte - MG, 30411-052"
+    },
+    {
+        "nome": "Jack Rock Bar",
+        "telefone": "(31) 97156-7826",
+        "endereco": "Av. do Contorno, 5623 - Funcionários, Belo Horizonte - MG, 30110-035"
+    },
+    {
+        "nome": "Bar Coqueiros",
+        "telefone": "(31) 99553-4682",
+        "endereco": "Av. Amazonas, 105 - Centro, Belo Horizonte - MG, 30180-001"
+    },
+    {
+        "nome": "Barkana",
+        "telefone": "Sem telefone",
+        "endereco": "Rua dos Goitacazes, 490 - Centro, Belo Horizonte - MG, 30190-050"
+    },
+    {
+        "nome": "Vila Mariana - Restaurante - Cafeteria - Sushi bar",
+        "telefone": "(31) 98469-9444",
+        "endereco": "R. Uberaba, 425 - Barro Preto, Belo Horizonte - MG, 30180-080"
     }
 ]
