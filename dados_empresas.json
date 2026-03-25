@@ -813,5 +813,125 @@
         "nome": "A OBRA Bar Dançante",
         "telefone": "Sem telefone",
         "endereco": "R. Rio Grande do Norte, 1168 - Savassi, Belo Horizonte - MG, 30130-131"
+    },
+    {
+        "nome": "Terraço Niê",
+        "telefone": "(31) 99062-5530",
+        "endereco": "R. Rio de Janeiro, 471 - Centro, Belo Horizonte - MG, 30160-041"
+    },
+    {
+        "nome": "Terraço Niê",
+        "telefone": "(31) 99062-5530",
+        "endereco": "R. Rio de Janeiro, 471 - Centro, Belo Horizonte - MG, 30160-041"
+    },
+    {
+        "nome": "Restaurante Trem Bom Mineiro",
+        "telefone": "Sem telefone",
+        "endereco": "R. Espírito Santo, 291 - Centro, Belo Horizonte - MG, 30160-030"
+    },
+    {
+        "nome": "Cantina do Lucas",
+        "telefone": "(31) 3226-7153",
+        "endereco": "Av. Augusto de Lima, 233 - Loja 18/19 o9 - Centro, Belo Horizonte - MG, 30190-001"
+    },
+    {
+        "nome": "Glouton",
+        "telefone": "(31) 3292-4237",
+        "endereco": "R. Bárbara Heliodora, 71 - Lourdes, Belo Horizonte - MG, 30180-130"
+    },
+    {
+        "nome": "Restaurante Beco",
+        "telefone": "(31) 3272-1489",
+        "endereco": "R. dos Tamóios, 232 - Centro, Belo Horizonte - MG, 30120-050"
+    },
+    {
+        "nome": "Restaurante Mineirinho I",
+        "telefone": "(31) 3245-1236",
+        "endereco": "R. Espírito Santo, 310 - Centro, Belo Horizonte - MG, 30160-030"
+    },
+    {
+        "nome": "GIS CLUBE",
+        "telefone": "(31) 97361-6882",
+        "endereco": "Avenida: Barbacena, 33 - Barro Preto, Belo Horizonte - MG, 30190-130"
+    },
+    {
+        "nome": "Paco Pigalle Bar",
+        "telefone": "(31) 99809-1014",
+        "endereco": "Av. Francisco Sá, 126 - Prado, Belo Horizonte - MG, 30411-145"
+    },
+    {
+        "nome": "DDuck DClub",
+        "telefone": "(31) 99909-6669",
+        "endereco": "R. Pernambuco, 1316 - Funcionários, Belo Horizonte - MG, 30130-154"
+    },
+    {
+        "nome": "A OBRA Bar Dançante",
+        "telefone": "Sem telefone",
+        "endereco": "R. Rio Grande do Norte, 1168 - Savassi, Belo Horizonte - MG, 30130-131"
+    },
+    {
+        "nome": "New Sagitárius - Night Club",
+        "telefone": "(31) 3221-9304",
+        "endereco": "R. Alfenas, 27 - Mangabeiras, Belo Horizonte - MG, 30310-230"
+    },
+    {
+        "nome": "US! CLUB",
+        "telefone": "(31) 99402-5018",
+        "endereco": "Av. Barbacena, 33 - 2° andar - Santo Agostinho, Belo Horizonte - MG, 30190-130"
+    },
+    {
+        "nome": "Night Market Rooftop",
+        "telefone": "(31) 99535-8210",
+        "endereco": "R. Wilson Rocha Lima, 137 - Estoril, Belo Horizonte - MG, 30494-460"
+    },
+    {
+        "nome": "Boate Capricornios 2025",
+        "telefone": "(31) 99418-5991",
+        "endereco": "Rua dos Carijós, 840 - Centro, Belo Horizonte - MG, 30120-060"
+    },
+    {
+        "nome": "Stop Girls",
+        "telefone": "(31) 98314-6883",
+        "endereco": "Av. Amazonas, 1523 - Barro Preto, Belo Horizonte - MG, 30180-002"
+    },
+    {
+        "nome": "Afrodite 556 BH",
+        "telefone": "(31) 99363-7990",
+        "endereco": "R. Juiz de Fora, 556 - Barro Preto, Belo Horizonte - MG, 30180-060"
+    },
+    {
+        "nome": "Casa de Shows",
+        "telefone": "(31) 98789-4024",
+        "endereco": "Av. Olegário Maciel, 583 - Centro, Belo Horizonte - MG, 30160-041"
+    },
+    {
+        "nome": "A Autêntica",
+        "telefone": "Sem telefone",
+        "endereco": "R. Álvares Maciel, 312 - Santa Efigênia, Belo Horizonte - MG, 30150-250"
+    },
+    {
+        "nome": "Estação Gueto",
+        "telefone": "(31) 99428-4229",
+        "endereco": "R. Paracatu, 65 A - Barro Preto, Belo Horizonte - MG, 30180-090"
+    },
+    {
+        "nome": "Why American Pub",
+        "telefone": "Sem telefone",
+        "endereco": "Av: Francisco Sá, 66 - Prado, Belo Horizonte - MG, 31411-145"
+    },
+    {
+        "nome": "Jack Rock Bar",
+        "telefone": "(31) 97156-7826",
+        "endereco": "Av. do Contorno, 5623 - Funcionários, Belo Horizonte - MG, 30110-035"
+    },
+    {
+        "nome": "Casa Matriz BH",
+        "telefone": "Sem telefone",
+        "endereco": "Ao lado do - R. Espírito Santo, número 1275 - Centro, Belo Horizonte - MG, 30170-001"
+    },
+    {
+        "nome": "Rust Music Bar",
+        "telefone": "(31) 99981-9741",
+        "endereco": "Av. Professor Mário Werneck, 50 - Estoril, Belo Horizonte - MG, 30455-610"
     }
 ]
